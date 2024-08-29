@@ -77,14 +77,6 @@ Run the associated command:
 python workshop_setup.py --provider <YOUR_PROVIDER>
 ```
 
-Optionally, you can choose the dataset size:
-
-```shell
-python workshop_setup.py --provider <YOUR_PROVIDER> --dataset-size <SIZE>
-```
-
-Where `<SIZE>` is one of `10000`, `50000` (default), `100000` or `200000`.
-
 ### Install containerization tools
 
 #### Docker (Required)
@@ -282,7 +274,19 @@ Notice the commented out lines for `quantization`. Try each one, and see how it 
 Try changing `.hnsw` to `.flat`. How does this affect the memory usage and the search performance of the system?
 - Note: The `.flat` index can only be used with the `bq` quantization.
 
-### Notes for Docker users
+### Try a larger dataset
+
+If you want to experiment with even larger (or smaller) datasets, you can run the following command:
+
+```shell
+python workshop_setup.py --provider <YOUR_PROVIDER> --dataset-size <SIZE>
+```
+
+Where `<SIZE>` is one of `10000`, `50000` (default), `100000` or `200000`.
+
+They are pre-vectorized datasets, so you can experiment with different sizes without having to wait for the data to be vectorized, or spend money on the inference.
+
+## For Docker users
 
 - If for whatever reason you can't use Minikube, you can run Weaviate in Docker. You can spin up a single-node Weaviate cluster with the following command:
 

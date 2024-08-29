@@ -113,12 +113,19 @@ with connect_to_weaviate() as client:
         st.markdown("### Cluster statistics")
 
         with st.container(border=True):
-            if mt_enabled:
-                tenants = collection.tenants.get()
-                st.metric(label="Tenant count", value=len(tenants))
-            else:
-                obj_count = collection.aggregate.over_all(total_count=True).total_count
-                st.metric(label="Object count", value=obj_count)
+            @st.fragment(run_every=2)
+            def update_cluster_stats():
+                with connect_to_weaviate() as stats_client:
+                    stats_collection = stats_client.collections.get(collection_name)
+                    if mt_enabled:
+                        tenants = stats_collection.tenants.get()
+                        st.metric(label="Tenant count", value=len(tenants))
+                    else:
+                        obj_count = stats_collection.aggregate.over_all(total_count=True).total_count
+                        st.metric(label="Object count", value=obj_count)
+                time.sleep(2)
+
+            update_cluster_stats()
 
         with st.container(border=True):
             node_data = client.cluster.nodes(output="verbose")
