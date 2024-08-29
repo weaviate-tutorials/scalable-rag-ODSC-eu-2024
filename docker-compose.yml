@@ -11,6 +11,7 @@ services:
     image: cr.weaviate.io/semitechnologies/weaviate:1.26.1
     ports:
     - 8080:8080
+    - 6060:6060
     - 50051:50051
     restart: on-failure:0
     environment:

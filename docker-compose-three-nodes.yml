@@ -11,8 +11,9 @@ services:
     image: cr.weaviate.io/semitechnologies/weaviate:1.26.1
     restart: on-failure:0
     ports:
-     - "8080:8080"
-     - 50151:50051
+    - 8080:8080
+    - 50051:50051
+    - 6060:6060
     environment:
       QUERY_DEFAULTS_LIMIT: 25
       QUERY_MAXIMUM_RESULTS: 10000
@@ -38,8 +39,8 @@ services:
     image: cr.weaviate.io/semitechnologies/weaviate:1.26.1
     restart: on-failure:0
     ports:
-     - "8081:8080"
-     - 50152:50051
+    - 8081:8080
+    - 50152:50051
     environment:
       QUERY_DEFAULTS_LIMIT: 25
       QUERY_MAXIMUM_RESULTS: 10000
@@ -66,8 +67,8 @@ services:
     image: cr.weaviate.io/semitechnologies/weaviate:1.26.1
     restart: on-failure:0
     ports:
-     - "8082:8080"
-     - 50153:50051
+    - 8082:8080
+    - 50153:50051
     environment:
       QUERY_DEFAULTS_LIMIT: 25
       QUERY_MAXIMUM_RESULTS: 10000

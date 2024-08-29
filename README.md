@@ -287,13 +287,21 @@ Try changing `.hnsw` to `.flat`. How does this affect the memory usage and the s
 - If for whatever reason you can't use Minikube, you can run Weaviate in Docker. You can spin up a single-node Weaviate cluster with the following command:
 
 ```shell
-docker-compose up -d "docker-compose.yaml"
+docker-compose -f docker-compose.yml up -d
+```
+
+This will start a single-node Weaviate cluster. You can access the Weaviate root endpoint at `http://localhost:8080/v1/meta`.
+
+Stop the cluster with:
+
+```shell
+docker-compose down -f docker-compose.yml
 ```
 
 And a three-node cluster with:
 
 ```shell
-docker-compose up -d "docker-compose-three-nodes.yaml"
+docker-compose -f docker-compose-three-nodes.yml up -d
 ```
 
 Note that the Docker-based Weaviate is configured to run on port 8080. Open `helpers.py` and update `port=80` to `port=8080` to use the Streamlit app.
