@@ -6,7 +6,7 @@ from helpers import (
     STREAMLIT_STYLING,
     connect_to_weaviate,
     get_top_companies,
-    search_objects,
+    weaviate_query,
     get_pprof_results,
     rag,
 )
@@ -70,7 +70,7 @@ with connect_to_weaviate() as client:
 
         st.markdown("#### Results")
 
-        search_response = search_objects(
+        search_response = weaviate_query(
             collection, query, company_filter, limit, search_type
         )
 
@@ -96,18 +96,13 @@ with connect_to_weaviate() as client:
 
             if st.button("Generate response"):
                 with st.spinner("Generating response..."):
-                    context = "\n\n".join(
-                        [
-                            f'Comany account: <company>{o.properties["company_author"]}</company> <converstion>{o.properties["text"]}</converstion>'
-                            for o in search_response.objects
-                        ]
+                    search_response = weaviate_query(
+                        collection, query, company_filter, limit, search_type, rag_query
                     )
-                    rag_responses = rag(rag_query, context, provider="claude")
 
-                    if rag_responses:
+                    if search_response:
                         with st.container(height=250, border=True):
-                            for c in rag_responses:
-                                st.write(c)
+                            st.write(search_response.generated)
 
     with col2:
         st.markdown("### Cluster statistics")

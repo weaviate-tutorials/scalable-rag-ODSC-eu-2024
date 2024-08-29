@@ -4,7 +4,7 @@ from enum import Enum
 from datasets import load_dataset
 from datetime import datetime
 from dateutil import parser
-from typing import Dict, Union, List, Any, Literal
+from typing import Dict, Union, List, Any, Literal, Optional
 from collections.abc import Iterator
 import claudette
 from anthropic.types import Message
@@ -69,13 +69,14 @@ def get_top_companies(collection: Collection):
     return response.properties["company_author"].top_occurrences
 
 
-def search_objects(
+def weaviate_query(
     collection: Collection,
     query: str,
     company_filter: str,
     limit: int,
     search_type: Literal["Hybrid", "Vector", "Keyword"],
-) -> Any:
+    rag_query: Optional[str] = None,
+):
     if company_filter:
         company_filter_obj = Filter.by_property("company_author").like(company_filter)
     else:
@@ -88,13 +89,24 @@ def search_objects(
     elif search_type == "Keyword":
         alpha = 0
 
-    search_response = collection.query.hybrid(
-        query=query,
-        target_vector="text_with_metadata",
-        filters=company_filter_obj,
-        alpha=alpha,
-        limit=limit,
-    )
+
+    if rag_query:
+        search_response = collection.generate.hybrid(
+            query=query,
+            target_vector="text_with_metadata",
+            filters=company_filter_obj,
+            alpha=alpha,
+            limit=limit,
+            grouped_task=rag_query
+        )
+    else:
+        search_response = collection.query.hybrid(
+            query=query,
+            target_vector="text_with_metadata",
+            filters=company_filter_obj,
+            alpha=alpha,
+            limit=limit,
+        )
     return search_response
 
 
@@ -107,7 +119,7 @@ def get_pprof_results() -> str:
     )
 
 
-def rag(
+def manual_rag(
     rag_query: str, context: str, provider: Literal["claude", "ollama"]
 ) -> List[str]:
     prompt = f"""
