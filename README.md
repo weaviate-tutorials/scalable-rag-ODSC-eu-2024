@@ -278,15 +278,15 @@ We don't want to spoil the whole workshop for you, so we'll leave it here for no
 
 # Step 3.3
 
-=========================
+*************************
 ENJOY THE WORKSHOP
-=========================
+*************************
 
 We'll try lots of different things here & have a look at the memory profile of the Weaviate pod.
 
-=========================
+*************************
 ENJOY THE WORKSHOP
-=========================
+*************************
 
 # Step 4: Additional exercises to try
 
