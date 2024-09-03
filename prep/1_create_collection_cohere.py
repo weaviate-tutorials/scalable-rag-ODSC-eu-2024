@@ -11,8 +11,8 @@ client.collections.delete(CollectionName.SUPPORTCHAT)
 
 default_vindex_config = Configure.VectorIndex.hnsw(
     # quantizer=Configure.VectorIndex.Quantizer.bq()
-    # quantizer=Configure.VectorIndex.Quantizer.sq(training_limit=10000)
-    # quantizer=Configure.VectorIndex.Quantizer.pq(training_limit=10000)
+    # quantizer=Configure.VectorIndex.Quantizer.sq(training_limit=25000)
+    # quantizer=Configure.VectorIndex.Quantizer.pq(training_limit=25000)
 )
 
 # Create a new collection with specified properties and vectorizer configuration

@@ -10,6 +10,8 @@ services:
     - http
     image: cr.weaviate.io/semitechnologies/weaviate:1.26.1
     restart: on-failure:0
+    volumes:
+    - weaviate_odsc_2024_node1:/var/lib/weaviate
     ports:
     - 8080:8080
     - 50051:50051
@@ -41,6 +43,8 @@ services:
     ports:
     - 8081:8080
     - 50152:50051
+    volumes:
+    - weaviate_odsc_2024_node2:/var/lib/weaviate
     environment:
       QUERY_DEFAULTS_LIMIT: 25
       QUERY_MAXIMUM_RESULTS: 10000
@@ -69,6 +73,8 @@ services:
     ports:
     - 8082:8080
     - 50153:50051
+    volumes:
+    - weaviate_odsc_2024_node3:/var/lib/weaviate
     environment:
       QUERY_DEFAULTS_LIMIT: 25
       QUERY_MAXIMUM_RESULTS: 10000
@@ -84,4 +90,8 @@ services:
       CLUSTER_JOIN: 'weaviate-node-1:7100'
       RAFT_JOIN: 'node1,node2,node3'
       RAFT_BOOTSTRAP_EXPECT: 3
+volumes:
+  weaviate_odsc_2024_node1:
+  weaviate_odsc_2024_node2:
+  weaviate_odsc_2024_node3:
 ...

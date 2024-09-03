@@ -2,11 +2,22 @@
 
 README for ODSC Europe training: "How to run scalable, fault-tolerant RAG with a vector database"
 
-## Part 1: Preparation
+# Step 1: Preparation & Setup
 
-### Install Python & set up a virtual environment
+Clone this repo and navigate into it. This will be your working directory for the workshop.
 
-Create & activate a virtual environment:
+```shell
+git clone git@github.com:weaviate-tutorials/scalable-rag-ODSC-eu-2024.git
+cd scalable-rag-ODSC-eu-2024
+```
+
+## 1.1 Install Python & set up a virtual environment
+
+> If you have a preferred setup (e.g. Conda/Poetry), please feel free to use that. Otherwise, we recommend following these steps.
+
+Install `Python 3.9` or higher (e.g. from the [Python website](https://python.org/), or `pyenv`).
+
+Then, create & activate a virtual environment:
 
 ```shell
 python -m venv .venv  # Or use `python3` if `python` is Python 2
@@ -27,13 +38,13 @@ Install the required Python packages:
 pip install -r requirements.txt
 ```
 
-### Choose your embedding & LLM provider
+## 1.2 Choose your embedding & LLM provider
 
-The workshop is set up for three different embeddings & LLM providers options.
+The workshop is set up for three different embeddings & LLM providers options ([Ollama](#121-option-1-ollama), [Cohere](#122-option-2-cohere), or [OpenAI](#123-option-3-openai)).
 
-Once you select your option, run the provided command to download the data & prepare your system:
+We provide helper CLI to download the data & prepare your project for you:
 
-#### Option 1: Ollama
+### 1.2.1 Option 1: Ollama
 
 - Recommended if you have 16+ GB of RAM and a modern computer
 - We will use pre-embedded data for this workshop, so Ollama will be used for vectorizing queries & LLM use
@@ -43,7 +54,13 @@ Once you select your option, run the provided command to download the data & pre
 python workshop_setup.py --provider ollama
 ```
 
-#### Option 2: Cohere
+If you have already downloaded the data file, you can use the existing version with:
+
+```shell
+python workshop_setup.py --provider ollama --use-cache
+```
+
+### 1.2.2 Option 2: Cohere
 
 - Recommended if you want to use an API-based solution
 - Cohere account & API key required
@@ -55,7 +72,13 @@ python workshop_setup.py --provider ollama
 python workshop_setup.py --provider cohere
 ```
 
-#### Option 3: OpenAI
+If you have already downloaded the data file, you can use the existing version with:
+
+```shell
+python workshop_setup.py --provider cohere --use-cache
+```
+
+### 1.2.3 Option 3: OpenAI
 
 - Recommended if you want to use an API-based solution
 - OpenAI account & API key required
@@ -67,7 +90,13 @@ python workshop_setup.py --provider cohere
 python workshop_setup.py --provider openai
 ```
 
-#### Embedding & LLM provider: summary:
+If you have already downloaded the data file, you can use the existing version with:
+
+```shell
+python workshop_setup.py --provider openai --use-cache
+```
+
+### 1.2.4 Embedding & LLM provider: summary
 
 Select your provider from `ollama`, `cohere` or `openai`.
 Acquire a key if needed, and set it as an environment variable.
@@ -77,14 +106,14 @@ Run the associated command:
 python workshop_setup.py --provider <YOUR_PROVIDER>
 ```
 
-### Install containerization tools
+## 1.3 Install containerization tools
 
-#### Docker (Required)
+### 1.3.1 Docker (Required)
 
 Install Docker Desktop: https://www.docker.com/products/docker-desktop/
 Docker will also be used as a container runtime for Minikube.
 
-#### Minikube & Helm (Recommended)
+### 1.3.2 Minikube & Helm (Recommended)
 
 For running Weaviate in a Kubernetes cluster, you can use Minikube & Helm.
 
@@ -95,9 +124,11 @@ You will get the most out of the workshop if you have Minikube & Helm installed.
 
 Now, you are ready to start running Weaviate!
 
-## Part 2: Single-node Weaviate
+# Part 2: Cluster setup
 
-### Minikube & Helm
+This workshop is designed for you to use kubernetes. But you can also just use Docker. For Docker instructions, go straight to [section 2.2](#22-docker).
+
+## 2.1 Minikube & Helm
 
 Update helm chart & add the Weaviate repository:
 
@@ -168,15 +199,51 @@ Now, you should be able to see the memory usage of the Weaviate pod by running:
 go tool pprof -top http://localhost:6060/debug/pprof/heap
 ```
 
-### Use Weaviate
-
-Check the Weaviate root endpoint:
+Check an Weaviate endpoint:
 
 ```shell
 curl http://localhost:80/v1/meta | jq
 ```
 
 You should see a response - this means Weaviate is running!
+
+Now, go to [Step 3](#step-3-work-with-weaviate)
+
+## 2.2 Docker
+
+If for whatever reason you can't use Minikube, you can follow this workshop by running Weaviate in Docker.
+
+Start up a single-node Weaviate cluster with the following command:
+
+```shell
+docker-compose -f docker-compose.yml up -d
+```
+
+This will start a single-node Weaviate cluster.
+
+Check an Weaviate endpoint:
+
+```shell
+curl http://localhost:8080/v1/meta | jq
+```
+
+You should see a response - this means Weaviate is running!
+
+The Docker-based Weaviate is configured to run on port 8080. Open `helpers.py` and update `port=80` to `port=8080` and restart the Streamlit app.
+
+# Step 3: Work with Weaviate
+
+## 3.1 Run the demo Streamlit app
+
+We have a Streamlit app that will help you to visualise basic cluster statistics, and to make use of the data. Run it with:
+
+```shell
+streamlit run app.py
+```
+
+This will throw an error, but that's OK. We'll fix that in the next step.
+
+## 3.2 Use Weaviate
 
 Now, let's load some data into Weaviate. You should now have these files:
 
@@ -191,13 +258,7 @@ python 1_create_collection.py
 
 Take a look at the script to see what it does. See what settings are being configured, and explore what options are available (or commented out - as alternatives).
 
-We have a Streamlit app that can be used to explore the data. To run it, use the following command:
-
-```shell
-streamlit run app.py
-```
-
-This should show that we don't have any data yet.
+Now, refresh your streamlit app. The app should no longer throw an error.
 
 So let's run the second script to add data to the collection:
 
@@ -215,7 +276,21 @@ You might see that the import didn't quite finish. This is because the Weaviate 
 
 We don't want to spoil the whole workshop for you, so we'll leave it here for now. But - if you find yourself ahead of the group, you can try playing with the following sections and ideas:
 
-### Increase the pod memory
+# Step 3.3
+
+=========================
+ENJOY THE WORKSHOP
+=========================
+
+We'll try lots of different things here & have a look at the memory profile of the Weaviate pod.
+
+=========================
+ENJOY THE WORKSHOP
+=========================
+
+# Step 4: Additional exercises to try
+
+## 4.1 Increase the pod memory (Kubernetes users only)
 
 Increase its memory, e.g. to:
 
@@ -235,9 +310,11 @@ Actually, we have a pre-configured values file for this. Run the following comma
 helm upgrade --install "weaviate" weaviate/weaviate --namespace "weaviate" --values ./values-larger.yaml
 ```
 
-### Change the number of pods
+## 4.2 Scale out Weaviate
 
-For this, you need to do two things.
+### 4.2.1 Kubernetes
+
+To scale Weaviate out with Minikube, you need to do two things.
 
 First, shut down minikube. So, close the tunnel, and stop minikube:
 
@@ -263,9 +340,33 @@ Then, install Weaviate again:
 helm upgrade --install "weaviate" weaviate/weaviate --namespace "weaviate" --values ./values.yaml
 ```
 
-See how this affects the memory usage and the performance of the system.
+Now, once the pods are ready, go through the same steps as before.
 
-### Update the vector index & quantization settings
+Expose the service with `minikube tunnel`.
+
+Then, run the scripts to create the collection and add data.
+
+How do the results change? Do you notice the same limitations?
+
+### 4.2.2 Docker
+
+First, shut down the existing Docker-based Weaviate.
+
+```shell
+docker-compose -f docker-compose.yml down
+```
+
+Now, spin up a three-node Weaviate cluster:
+
+```shell
+docker-compose -f docker-compose-three-nodes.yml up -d
+```
+
+Then, run the scripts to create the collection and add data.
+
+Note that this is a slightly different exercise to the Kubernetes-based one. The reason is that the Kubernetes pods were configured with an artificially small amount of RAM, to showcase the benefits of scaling up or out.
+
+## 4.3 Update the vector index & quantization settings (Any deployment)
 
 In `1_create_collection.py`, you can change the settings for the vector index and quantization.
 
@@ -274,7 +375,7 @@ Notice the commented out lines for `quantization`. Try each one, and see how it 
 Try changing `.hnsw` to `.flat`. How does this affect the memory usage and the search performance of the system?
 - Note: The `.flat` index can only be used with the `bq` quantization.
 
-### Try a larger dataset
+## 4.4 Try a larger dataset (Any deployment)
 
 If you want to experiment with even larger (or smaller) datasets, you can run the following command:
 
@@ -286,26 +387,28 @@ Where `<SIZE>` is one of `10000`, `50000` (default), `100000` or `200000`.
 
 They are pre-vectorized datasets, so you can experiment with different sizes without having to wait for the data to be vectorized, or spend money on the inference.
 
-## For Docker users
+## Finish up
 
-- If for whatever reason you can't use Minikube, you can run Weaviate in Docker. You can spin up a single-node Weaviate cluster with the following command:
+### Kubernetes
 
-```shell
-docker-compose -f docker-compose.yml up -d
-```
-
-This will start a single-node Weaviate cluster. You can access the Weaviate root endpoint at `http://localhost:8080/v1/meta`.
-
-Stop the cluster with:
+Close the tunnel by closing the terminal on which it is running, and stop minikube:
 
 ```shell
-docker-compose down -f docker-compose.yml
+minikube stop
 ```
+
+### Docker
+
+When finished with the workshop, you can stop the cluster with:
+
+```shell
+docker-compose -f docker-compose.yml down
+```
+
+Or
 
 And a three-node cluster with:
 
 ```shell
-docker-compose -f docker-compose-three-nodes.yml up -d
+docker-compose -f docker-compose-three-nodes.yml down
 ```
-
-Note that the Docker-based Weaviate is configured to run on port 8080. Open `helpers.py` and update `port=80` to `port=8080` to use the Streamlit app.

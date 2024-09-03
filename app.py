@@ -8,7 +8,6 @@ from helpers import (
     get_top_companies,
     weaviate_query,
     get_pprof_results,
-    rag,
 )
 import plotly.graph_objs as go
 from datetime import datetime
