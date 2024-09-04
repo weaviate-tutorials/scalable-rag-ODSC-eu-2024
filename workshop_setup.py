@@ -8,7 +8,7 @@ import shutil
 
 @click.command()
 @click.option("--provider", default="ollama", help="Which model provider to use.")
-@click.option("--dataset-size", default="10000", help="Size of the dataset to use.")
+@click.option("--dataset-size", default="50000", help="Size of the dataset to use.")
 @click.option("--use-cache", is_flag=True, help="Use cached files if available.")
 def download(provider, dataset_size, use_cache):
     """Download prerequisite files & confirm required aspects."""

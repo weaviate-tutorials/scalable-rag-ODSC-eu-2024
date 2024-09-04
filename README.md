@@ -98,15 +98,24 @@ If you have already downloaded the data file, you can use the existing version w
 python workshop_setup.py --provider openai --use-cache
 ```
 
-### 1.2.4 Embedding & LLM provider: summary
+### 1.2.4 RECAP: Embedding & LLM provider
 
-Select your provider from `ollama`, `cohere` or `openai`.
-Acquire a key if needed, and set it as an environment variable.
-Run the associated command:
+You should have:
+- Selected your provider from `ollama`, `cohere` or `openai`.
+- Acquired a key if needed, and set it as an environment variable.
+- Run the associated command:
 
 ```shell
 python workshop_setup.py --provider <YOUR_PROVIDER>
 ```
+
+If the download is going to take *very* long (e.g. more than 10 minutes), maybe stop the download & use a smaller dataset. Do this by adding `--dataset-size 10000` to the end of your command, like:
+
+```shell
+python workshop_setup.py --provider <YOUR_PROVIDER> --dataset-size 10000
+```
+
+While the download is progressing, you can continue to the next section. Open a new terminal window, and continue along.
 
 ## 1.3 Install containerization tools
 
