@@ -38,6 +38,8 @@ Install the required Python packages:
 pip install -r requirements.txt
 ```
 
+> Note: If you have network connectivity issues, the installation may time out part way through. If this happens, just try running the command again. It will re-used cached data, so you will make further
+
 ## 1.2 Choose your embedding & LLM provider
 
 The workshop is set up for three different embeddings & LLM providers options ([Ollama](#121-option-1-ollama), [Cohere](#122-option-2-cohere), or [OpenAI](#123-option-3-openai)).

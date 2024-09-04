@@ -8,7 +8,7 @@ import shutil
 
 @click.command()
 @click.option("--provider", default="ollama", help="Which model provider to use.")
-@click.option("--dataset-size", default="50000", help="Size of the dataset to use.")
+@click.option("--dataset-size", default="10000", help="Size of the dataset to use.")
 @click.option("--use-cache", is_flag=True, help="Use cached files if available.")
 def download(provider, dataset_size, use_cache):
     """Download prerequisite files & confirm required aspects."""
@@ -31,15 +31,16 @@ def download(provider, dataset_size, use_cache):
 
     if provider == "ollama":
         # Download file
+        dl_filename = f"twitter_customer_support_nomic_{dataset_size}.h5"
         out_filename = f"twitter_customer_support_nomic.h5"
 
-        if (data_dir / out_filename).exists() and use_cache:
-            print(f"Using cached file {out_filename}...")
+        if (data_dir / dl_filename).exists() and use_cache:
+            print(f"Using cached file {dl_filename}...")
         else:
             if use_cache:
-                print(f"No cached file {out_filename} found.")
+                print(f"No cached file {dl_filename} found.")
             url = f"https://weaviate-workshops.s3.eu-west-2.amazonaws.com/odsc-europe-2024/twitter_customer_support_weaviate_export_{dataset_size}_nomic.h5"
-            download_file(url, data_dir / out_filename)
+            download_file(url, data_dir / dl_filename)
 
         # Run Ollama commands
         print("Running 'ollama pull nomic-embed-text'...")
@@ -50,15 +51,15 @@ def download(provider, dataset_size, use_cache):
 
     elif provider == "openai":
         # Download file
-        out_filename = f"twitter_customer_support_openai.h5"
+        dl_filename = f"twitter_customer_support_openai_{dataset_size}.h5"
 
-        if (data_dir / out_filename).exists() and use_cache:
-            print(f"Using cached file {out_filename}...")
+        if (data_dir / dl_filename).exists() and use_cache:
+            print(f"Using cached file {dl_filename}...")
         else:
             if use_cache:
-                print(f"No cached file {out_filename} found.")
+                print(f"No cached file {dl_filename} found.")
             url = f"https://weaviate-workshops.s3.eu-west-2.amazonaws.com/odsc-europe-2024/twitter_customer_support_weaviate_export_{dataset_size}_openai-text-embedding-3-small.h5"
-            download_file(url, data_dir / out_filename)
+            download_file(url, data_dir / dl_filename)
 
         # Check for OPENAI_API_KEY
         if not os.environ.get("OPENAI_API_KEY"):
@@ -68,15 +69,15 @@ def download(provider, dataset_size, use_cache):
 
     elif provider == "cohere":
         # Download file
-        out_filename = f"twitter_customer_support_cohere.h5"
+        dl_filename = f"twitter_customer_support_cohere_{dataset_size}.h5"
 
-        if (data_dir / out_filename).exists() and use_cache:
-            print(f"Using cached file {out_filename}...")
+        if (data_dir / dl_filename).exists() and use_cache:
+            print(f"Using cached file {dl_filename}...")
         else:
             if use_cache:
-                print(f"No cached file {out_filename} found.")
+                print(f"No cached file {dl_filename} found.")
             url = f"https://weaviate-workshops.s3.eu-west-2.amazonaws.com/odsc-europe-2024/twitter_customer_support_weaviate_export_{dataset_size}_cohere-embed-multilingual-light-v3.0.h5"
-            download_file(url, data_dir / out_filename)
+            download_file(url, data_dir / dl_filename)
 
         # Check for COHERE_API_KEY
         if not os.environ.get("COHERE_API_KEY"):
@@ -86,6 +87,8 @@ def download(provider, dataset_size, use_cache):
 
     else:
         print(f"Sorry, the provider value '{provider}' is not supported.")
+
+    shutil.copy(data_dir / dl_filename, data_dir / out_filename)
 
     # Copy appropriate configuration file
     for src_config, dest_config in [
@@ -97,12 +100,14 @@ def download(provider, dataset_size, use_cache):
 
 
 def download_file(url, filepath):
+    temp_filepath = filepath.with_suffix(".part")
+
     print(f"Downloading {url}...")
     response = requests.get(url, stream=True)
     response.raise_for_status()
     total_size = int(response.headers.get("content-length", 0))
 
-    with open(filepath, "wb") as file, tqdm(
+    with open(temp_filepath, "wb") as file, tqdm(
         desc=filepath.name,
         total=total_size,
         unit="iB",
@@ -113,6 +118,7 @@ def download_file(url, filepath):
             size = file.write(data)
             progress_bar.update(size)
 
+    temp_filepath.rename(filepath)
     print(f"File downloaded to {filepath}")
 
 
