@@ -396,7 +396,7 @@ How do the results change? Do you notice the same limitations?
 First, shut down the existing Docker-based Weaviate.
 
 ```shell
-docker-compose -f docker-compose.yml down
+docker-compose down
 ```
 
 Now, spin up a three-node Weaviate cluster:
@@ -404,6 +404,8 @@ Now, spin up a three-node Weaviate cluster:
 ```shell
 docker-compose -f docker-compose-three-nodes.yml up -d
 ```
+
+(Earlier, we were using the default `docker-compose.yml` file, so we did not need to specify it. Now, we need to specify the file with the `-f` flag.)
 
 Then, run the scripts to create the collection and add data.
 
