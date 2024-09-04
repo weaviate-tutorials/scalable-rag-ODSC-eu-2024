@@ -2,6 +2,8 @@
 
 README for ODSC Europe training: "How to run scalable, fault-tolerant RAG with a vector database"
 
+![App screenshot](assets/app.png)
+
 # Step 1: Preparation & Setup
 
 Clone this repo and navigate into it. This will be your working directory for the workshop.
