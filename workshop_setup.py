@@ -41,7 +41,6 @@ def download(provider, dataset_size, use_cache):
                 print(f"No cached file {dl_filename} found.")
             url = f"https://weaviate-workshops.s3.eu-west-2.amazonaws.com/odsc-europe-2024/twitter_customer_support_weaviate_export_{dataset_size}_nomic.h5"
             download_file(url, data_dir / dl_filename)
-            shutil.copy(data_dir / dl_filename, data_dir / out_filename)
 
         # Run Ollama commands
         print("Running 'ollama pull nomic-embed-text'...")
@@ -62,7 +61,6 @@ def download(provider, dataset_size, use_cache):
                 print(f"No cached file {dl_filename} found.")
             url = f"https://weaviate-workshops.s3.eu-west-2.amazonaws.com/odsc-europe-2024/twitter_customer_support_weaviate_export_{dataset_size}_openai-text-embedding-3-small.h5"
             download_file(url, data_dir / dl_filename)
-            shutil.copy(data_dir / dl_filename, data_dir / out_filename)
 
         # Check for OPENAI_API_KEY
         if not os.environ.get("OPENAI_API_KEY"):
@@ -82,7 +80,6 @@ def download(provider, dataset_size, use_cache):
                 print(f"No cached file {dl_filename} found.")
             url = f"https://weaviate-workshops.s3.eu-west-2.amazonaws.com/odsc-europe-2024/twitter_customer_support_weaviate_export_{dataset_size}_cohere-embed-multilingual-light-v3.0.h5"
             download_file(url, data_dir / dl_filename)
-            shutil.copy(data_dir / dl_filename, data_dir / out_filename)
 
         # Check for COHERE_API_KEY
         if not os.environ.get("COHERE_API_KEY"):
@@ -92,6 +89,8 @@ def download(provider, dataset_size, use_cache):
 
     else:
         print(f"Sorry, the provider value '{provider}' is not supported.")
+
+    shutil.copy(data_dir / dl_filename, data_dir / out_filename)
 
     # Copy appropriate configuration file
     for src_config, dest_config in [

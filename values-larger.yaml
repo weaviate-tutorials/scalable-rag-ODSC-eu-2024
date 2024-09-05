@@ -10,8 +10,8 @@ updateStrategy:
   type: RollingUpdate
 resources:
   requests:
-    cpu: '1000m'
-    memory: '1500Mi'
+    cpu: '2000m'
+    memory: '2000Mi'
   limits:
     cpu: '4000m'
     memory: '3000Mi'
