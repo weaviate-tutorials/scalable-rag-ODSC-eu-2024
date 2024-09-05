@@ -8,8 +8,8 @@ import shutil
 
 @click.command()
 @click.option("--provider", default="ollama", help="Which model provider to use.")
-@click.option("--dataset-size", default="10000", help="Size of the dataset to use.")
-@click.option("--use-cache", is_flag=True, help="Use cached files if available.")
+@click.option("--dataset-size", default="50000", help="Size of the dataset to use.")
+@click.option("--use-cache", is_flag=True, default=True, help="Use cached files if available.")
 def download(provider, dataset_size, use_cache):
     """Download prerequisite files & confirm required aspects."""
     available_dataset_sizes = ["10000", "50000", "100000", "200000"]
@@ -41,6 +41,7 @@ def download(provider, dataset_size, use_cache):
                 print(f"No cached file {dl_filename} found.")
             url = f"https://weaviate-workshops.s3.eu-west-2.amazonaws.com/odsc-europe-2024/twitter_customer_support_weaviate_export_{dataset_size}_nomic.h5"
             download_file(url, data_dir / dl_filename)
+            shutil.copy(data_dir / dl_filename, data_dir / out_filename)
 
         # Run Ollama commands
         print("Running 'ollama pull nomic-embed-text'...")
@@ -52,6 +53,7 @@ def download(provider, dataset_size, use_cache):
     elif provider == "openai":
         # Download file
         dl_filename = f"twitter_customer_support_openai_{dataset_size}.h5"
+        out_filename = f"twitter_customer_support_openai.h5"
 
         if (data_dir / dl_filename).exists() and use_cache:
             print(f"Using cached file {dl_filename}...")
@@ -60,6 +62,7 @@ def download(provider, dataset_size, use_cache):
                 print(f"No cached file {dl_filename} found.")
             url = f"https://weaviate-workshops.s3.eu-west-2.amazonaws.com/odsc-europe-2024/twitter_customer_support_weaviate_export_{dataset_size}_openai-text-embedding-3-small.h5"
             download_file(url, data_dir / dl_filename)
+            shutil.copy(data_dir / dl_filename, data_dir / out_filename)
 
         # Check for OPENAI_API_KEY
         if not os.environ.get("OPENAI_API_KEY"):
@@ -70,6 +73,7 @@ def download(provider, dataset_size, use_cache):
     elif provider == "cohere":
         # Download file
         dl_filename = f"twitter_customer_support_cohere_{dataset_size}.h5"
+        out_filename = f"twitter_customer_support_cohere.h5"
 
         if (data_dir / dl_filename).exists() and use_cache:
             print(f"Using cached file {dl_filename}...")
@@ -78,6 +82,7 @@ def download(provider, dataset_size, use_cache):
                 print(f"No cached file {dl_filename} found.")
             url = f"https://weaviate-workshops.s3.eu-west-2.amazonaws.com/odsc-europe-2024/twitter_customer_support_weaviate_export_{dataset_size}_cohere-embed-multilingual-light-v3.0.h5"
             download_file(url, data_dir / dl_filename)
+            shutil.copy(data_dir / dl_filename, data_dir / out_filename)
 
         # Check for COHERE_API_KEY
         if not os.environ.get("COHERE_API_KEY"):
@@ -87,8 +92,6 @@ def download(provider, dataset_size, use_cache):
 
     else:
         print(f"Sorry, the provider value '{provider}' is not supported.")
-
-    shutil.copy(data_dir / dl_filename, data_dir / out_filename)
 
     # Copy appropriate configuration file
     for src_config, dest_config in [

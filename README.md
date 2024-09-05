@@ -2,6 +2,8 @@
 
 README for ODSC Europe training: "How to run scalable, fault-tolerant RAG with a vector database"
 
+![App screenshot](assets/app.png)
+
 # Step 1: Preparation & Setup
 
 Clone this repo and navigate into it. This will be your working directory for the workshop.
@@ -38,7 +40,9 @@ Install the required Python packages:
 pip install -r requirements.txt
 ```
 
-> Note: If you have network connectivity issues, the installation may time out part way through. If this happens, just try running the command again. It will re-used cached data, so you will make further
+> Tip 1: If you have network connectivity issues, the installation may time out part way through. If this happens, just try running the command again. It will re-used cached data, so you will make further
+
+> Tip 2: If you open new terminal or shell window, you will need to activate the virtual environment again. Navigate to the project directory and run `source .venv/bin/activate`.
 
 ## 1.2 Choose your embedding & LLM provider
 
@@ -98,15 +102,24 @@ If you have already downloaded the data file, you can use the existing version w
 python workshop_setup.py --provider openai --use-cache
 ```
 
-### 1.2.4 Embedding & LLM provider: summary
+### 1.2.4 RECAP: Embedding & LLM provider
 
-Select your provider from `ollama`, `cohere` or `openai`.
-Acquire a key if needed, and set it as an environment variable.
-Run the associated command:
+You should have:
+- Selected your provider from `ollama`, `cohere` or `openai`.
+- Acquired a key if needed, and set it as an environment variable.
+- Run the associated command:
 
 ```shell
 python workshop_setup.py --provider <YOUR_PROVIDER>
 ```
+
+If the download is going to take *very* long (e.g. more than 10 minutes), maybe stop the download & use a smaller dataset. Do this by adding `--dataset-size 10000` to the end of your command, like:
+
+```shell
+python workshop_setup.py --provider <YOUR_PROVIDER> --dataset-size 10000
+```
+
+While the download is progressing, you can continue to the next section. Open a new terminal window, and continue along.
 
 ## 1.3 Install containerization tools
 
@@ -132,6 +145,8 @@ This workshop is designed for you to use kubernetes. But you can also just use D
 
 ## 2.1 Minikube & Helm
 
+### 2.1.1 Set up the cluster
+
 Update helm chart & add the Weaviate repository:
 
 ```shell
@@ -145,7 +160,7 @@ Get the default values:
 helm show values weaviate/weaviate > values-default.yaml
 ```
 
-This file shows you the available options for the Weaviate helm chart. Take a look at the file with your favorite text editor if you would like (you can skip this step).
+This file shows you the set of available options for the Weaviate helm chart. (Optionally - take a look at the file with your favorite text editor.)
 
 You could edit this file, or create a new one with just the values you want to change.
 
@@ -157,6 +172,8 @@ Start a small cluster with Minikube:
 minikube config set memory 2048
 minikube start --nodes 1
 ```
+
+### 2.1.1 Install Weaviate onto our cluster
 
 Install Weaviate:
 
@@ -179,6 +196,12 @@ NAME         READY   STATUS    RESTARTS   AGE
 weaviate-0   0/1     Running   0          48s
 ```
 
+Can we access the cluster? Try running this, for example:
+
+```shell
+curl http://localhost:80/v1/meta | jq
+```
+
 We can't access the Weaviate service yet, because it's not exposed to the outside world.
 
 To expose the service, we can use `minikube tunnel`:
@@ -189,25 +212,25 @@ minikube tunnel
 
 Note that this command will block the terminal. You can open a new terminal to continue.
 
-We'll also expose the pprof service, which we can use to monitor the memory usage of the Weaviate pod. (To delete, run `kubectl delete service pprof-service -n weaviate`)
-
-```shell
-kubectl apply -f pprof-service.yaml
-```
-
-Now, you should be able to see the memory usage of the Weaviate pod by running:
-
-```shell
-go tool pprof -top http://localhost:6060/debug/pprof/heap
-```
-
-Check an Weaviate endpoint:
+Now, you can connect to Weaviate - e.g. to check an Weaviate endpoint:
 
 ```shell
 curl http://localhost:80/v1/meta | jq
 ```
 
 You should see a response - this means Weaviate is running!
+
+We'll also expose the pprof service, which we can use to monitor the memory usage of the Weaviate pod. (To delete, run `kubectl delete service pprof-service -n weaviate`)
+
+```shell
+kubectl apply -f pprof-service.yaml
+```
+
+You should be able to see the memory usage of the Weaviate pod by running:
+
+```shell
+go tool pprof -top http://localhost:6060/debug/pprof/heap
+```
 
 Now, go to [Step 3](#step-3-work-with-weaviate)
 
@@ -218,7 +241,7 @@ If for whatever reason you can't use Minikube, you can follow this workshop by r
 Start up a single-node Weaviate cluster with the following command:
 
 ```shell
-docker-compose -f docker-compose.yml up -d
+docker-compose up -d
 ```
 
 This will start a single-node Weaviate cluster.
@@ -233,11 +256,27 @@ You should see a response - this means Weaviate is running!
 
 The Docker-based Weaviate is configured to run on port 8080. Open `helpers.py` and update `port=80` to `port=8080` and restart the Streamlit app.
 
+You should be able to see the memory usage of the Weaviate pod by running:
+
+```shell
+go tool pprof -top http://localhost:6060/debug/pprof/heap
+```
+
+### 2.2.1 Why use Minikube?
+
+It might be tempting to skip the Kubernetes part of the workshop, and just use Docker. But, there are some benefits to using Minikube:
+
+- You can experiment with different configurations, such as different amounts of memory, or different numbers of nodes.
+- It more closely resembles a production environment, where you would likely use Kubernetes.
+- You can experiment with scaling out Weaviate, and see how it affects the memory usage.
+
+But, if you're short on time, or you're not interested in Kubernetes, you can just use the Docker setup. We think you'll still get a lot out of the workshop.
+
 # Step 3: Work with Weaviate
 
 ## 3.1 Run the demo Streamlit app
 
-We have a Streamlit app that will help you to visualise basic cluster statistics, and to make use of the data. Run it with:
+We have a Streamlit app that will help you to visualise basic cluster statistics, and to make use of the data. (Remember to navigate to the project directory and activate the virtual environment.) Run it with:
 
 ```shell
 streamlit run app.py
@@ -258,15 +297,19 @@ Run the first script to create a collection:
 python 1_create_collection.py
 ```
 
-Take a look at the script to see what it does. See what settings are being configured, and explore what options are available (or commented out - as alternatives).
+We will take a look together at the script.
 
-Now, refresh your streamlit app. The app should no longer throw an error.
+But if you would like, review it to see what it does. See what settings are being configured, and explore what options are available (or commented out - as alternatives).
+
+Now, refresh your streamlit app from the browser. The app should no longer throw an error.
 
 So let's run the second script to add data to the collection:
 
 ```shell
 python 2_add_data_with_vectors.py
 ```
+
+This should take just a few **seconds** to run. (We'll talk more about this, but that's because we're using pre-vectorized data.)
 
 You should see the memory profile of the Weaviate pod increase as the data is added.
 
@@ -355,7 +398,7 @@ How do the results change? Do you notice the same limitations?
 First, shut down the existing Docker-based Weaviate.
 
 ```shell
-docker-compose -f docker-compose.yml down
+docker-compose down
 ```
 
 Now, spin up a three-node Weaviate cluster:
@@ -363,6 +406,8 @@ Now, spin up a three-node Weaviate cluster:
 ```shell
 docker-compose -f docker-compose-three-nodes.yml up -d
 ```
+
+(Earlier, we were using the default `docker-compose.yml` file, so we did not need to specify it. Now, we need to specify the file with the `-f` flag.)
 
 Then, run the scripts to create the collection and add data.
 
