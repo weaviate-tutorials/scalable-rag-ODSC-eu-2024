@@ -240,7 +240,9 @@ To expose the service, we can use `minikube tunnel`:
 minikube tunnel
 ```
 
-Note that this command will block the terminal. You can open a new terminal to continue.
+> [!TIP]
+> Note that this command will block the terminal. Open a new terminal and continue on.
+> If you want to stop the tunnel, you can do so by pressing `Ctrl+C` or closing the terminal.
 
 Now, you can connect to Weaviate - e.g. to check an Weaviate endpoint:
 
