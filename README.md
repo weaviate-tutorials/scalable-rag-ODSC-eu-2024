@@ -170,6 +170,9 @@ Now, you are ready to start running Weaviate!
 
 This workshop is designed for you to use kubernetes. But you can also just use Docker. For Docker instructions, go straight to [section 2.2](#22-docker).
 
+> [!NOTE]
+> This is not an actual production setup. But, we can approximate a production set-up by using a local cluster and using Kubernetes to orchestrate our local cluster, just like we would a cluster in production.
+
 ## 2.1 Minikube & Helm
 
 ### 2.1.1 Set up the cluster
