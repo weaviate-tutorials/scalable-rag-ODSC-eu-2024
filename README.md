@@ -157,6 +157,9 @@ You will get the most out of the workshop if you have Minikube & Helm installed.
 
 Now, you are ready to start running Weaviate!
 
+> [!NOTE]
+> If you are waiting, you can check out the introductory materials. Take a look at the slide deck PDF, or the `intro_workshop.ipynb` notebook.
+
 # Part 2: Cluster setup
 
 This workshop is designed for you to use kubernetes. But you can also just use Docker. For Docker instructions, go straight to [section 2.2](#22-docker).
