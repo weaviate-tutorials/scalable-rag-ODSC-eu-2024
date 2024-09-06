@@ -60,10 +60,10 @@ We provide helper CLI to download the data & prepare your project for you:
 python workshop_setup.py --provider ollama
 ```
 
-If you have already downloaded the data file, you can use the existing version with:
+If you have already downloaded the data file, it will use a cached version. To overwrite the file, specify this flag::
 
 ```shell
-python workshop_setup.py --provider ollama --use-cache
+python workshop_setup.py --provider ollama --use-cache False
 ```
 
 ### 1.2.2 Option 2: Cohere
@@ -78,10 +78,10 @@ python workshop_setup.py --provider ollama --use-cache
 python workshop_setup.py --provider cohere
 ```
 
-If you have already downloaded the data file, you can use the existing version with:
+If you have already downloaded the data file, it will use a cached version. To overwrite the file, specify this flag::
 
 ```shell
-python workshop_setup.py --provider cohere --use-cache
+python workshop_setup.py --provider cohere --use-cache False
 ```
 
 ### 1.2.3 Option 3: OpenAI
@@ -96,10 +96,10 @@ python workshop_setup.py --provider cohere --use-cache
 python workshop_setup.py --provider openai
 ```
 
-If you have already downloaded the data file, you can use the existing version with:
+If you have already downloaded the data file, it will use a cached version. To overwrite the file, specify this flag::
 
 ```shell
-python workshop_setup.py --provider openai --use-cache
+python workshop_setup.py --provider openai --use-cache False
 ```
 
 ### 1.2.4 RECAP: Embedding & LLM provider
