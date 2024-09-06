@@ -56,6 +56,20 @@ We provide helper CLI to download the data & prepare your project for you:
 - We will use pre-embedded data for this workshop, so Ollama will be used for vectorizing queries & LLM use
 - No account or API key required
 
+Download & install Ollama from the [Ollama website](https://ollama.com/). Make sure Ollama is running, by:
+
+```shell
+ollama -v
+```
+
+You should see something like:
+```shell
+❯ ollama -v
+ollama version is 0.3.8
+```
+
+Then, run the following command:
+
 ```shell
 python workshop_setup.py --provider ollama
 ```
