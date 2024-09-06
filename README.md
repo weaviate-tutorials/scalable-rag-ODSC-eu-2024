@@ -15,6 +15,7 @@ cd scalable-rag-ODSC-eu-2024
 
 ## 1.1 Install Python & set up a virtual environment
 
+> [!NOTE]
 > If you have a preferred setup (e.g. Conda/Poetry), please feel free to use that. Otherwise, we recommend following these steps.
 
 Install `Python 3.9` or higher (e.g. from the [Python website](https://python.org/), or `pyenv`).
@@ -40,9 +41,11 @@ Install the required Python packages:
 pip install -r requirements.txt
 ```
 
-> Tip 1: If you have network connectivity issues, the installation may time out part way through. If this happens, just try running the command again. It will re-used cached data, so you will make further
+> [!TIP]
+> If you have network connectivity issues, the installation may time out part way through. If this happens, just try running the command again. It will re-used cached data, so you will make further
 
-> Tip 2: If you open new terminal or shell window, you will need to activate the virtual environment again. Navigate to the project directory and run `source .venv/bin/activate`.
+> [!TIP]
+> If you open new terminal or shell window, you will need to activate the virtual environment again. Navigate to the project directory and run `source .venv/bin/activate`.
 
 ## 1.2 Choose your embedding & LLM provider
 
@@ -52,9 +55,10 @@ We provide helper CLI to download the data & prepare your project for you:
 
 ### 1.2.1 Option 1: Ollama
 
-- Recommended if you have 16+ GB of RAM and a modern computer
-- We will use pre-embedded data for this workshop, so Ollama will be used for vectorizing queries & LLM use
-- No account or API key required
+> [!NOTE]
+> - Recommended if you have 16+ GB of RAM and a modern computer
+> - We will use pre-embedded data for this workshop, so Ollama will be used for vectorizing queries & LLM use
+> - No account or API key required
 
 Download & install Ollama from the [Ollama website](https://ollama.com/). Make sure Ollama is running, by:
 
@@ -84,11 +88,12 @@ While the download is progressing, you can continue to [the next section (1.3)](
 
 ### 1.2.2 Option 2: Cohere
 
-- Recommended if you want to use an API-based solution
-- Cohere account & API key required
-    - Once you have a key, set it as an environment variable: `export COHERE_API_KEY=your-key`
-    - We will use pre-embedded data for this workshop, so the expense will be for queries only & minimal
-    - Still, please set a budget limit in your account for extra safety
+> [!NOTE]
+> - Recommended if you want to use an API-based solution
+> - Cohere account & API key required
+>     - Once you have a key, set it as an environment variable: `export COHERE_API_KEY=your-key`
+>     - We will use pre-embedded data for this workshop, so the expense will be for queries only & minimal
+>     - Still, please set a budget limit in your account for extra safety
 
 ```shell
 python workshop_setup.py --provider cohere
@@ -104,11 +109,12 @@ While the download is progressing, you can continue to [the next section (1.3)](
 
 ### 1.2.3 Option 3: OpenAI
 
-- Recommended if you want to use an API-based solution
-- OpenAI account & API key required
-    - Once you have a key, set it as an environment variable: `export OPENAI_API_KEY=your-key`
-    - We will use pre-embedded data for this workshop, so the expense will be for queries only & minimal
-    - Still, please set a budget limit in your account for extra safety
+> [!NOTE]
+> - Recommended if you want to use an API-based solution
+> - OpenAI account & API key required
+>     - Once you have a key, set it as an environment variable: `export OPENAI_API_KEY=your-key`
+>     - We will use pre-embedded data for this workshop, so the expense will be for queries only & minimal
+>     - Still, please set a budget limit in your account for extra safety
 
 ```shell
 python workshop_setup.py --provider openai
