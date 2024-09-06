@@ -80,6 +80,8 @@ If you have already downloaded the data file, it will use a cached version. To o
 python workshop_setup.py --provider ollama --use-cache False
 ```
 
+While the download is progressing, you can continue to [the next section (1.3)](#13-install-containerization-tools). Open a new terminal window, and continue along.
+
 ### 1.2.2 Option 2: Cohere
 
 - Recommended if you want to use an API-based solution
@@ -97,6 +99,8 @@ If you have already downloaded the data file, it will use a cached version. To o
 ```shell
 python workshop_setup.py --provider cohere --use-cache False
 ```
+
+While the download is progressing, you can continue to [the next section (1.3)](#13-install-containerization-tools). Open a new terminal window, and continue along.
 
 ### 1.2.3 Option 3: OpenAI
 
@@ -116,6 +120,8 @@ If you have already downloaded the data file, it will use a cached version. To o
 python workshop_setup.py --provider openai --use-cache False
 ```
 
+While the download is progressing, you can continue to [the next section (1.3)](#13-install-containerization-tools). Open a new terminal window, and continue along.
+
 ### 1.2.4 RECAP: Embedding & LLM provider
 
 You should have:
@@ -132,8 +138,6 @@ If the download is going to take *very* long (e.g. more than 10 minutes), maybe 
 ```shell
 python workshop_setup.py --provider <YOUR_PROVIDER> --dataset-size 10000
 ```
-
-While the download is progressing, you can continue to the next section. Open a new terminal window, and continue along.
 
 ## 1.3 Install containerization tools
 
