@@ -312,6 +312,8 @@ If you are new to Weaviate, you can take a look at the introductory materials. T
 
 In the in-person workshop, we will go through the introductory materials together. If you are doing this workshop on your own, you can go through the materials at your own pace.
 
+For complete examples, see `intro_workshop_finished.ipynb` notebook.
+
 ## 3.1 Run the demo Streamlit app
 
 We have a Streamlit app that will help you to visualise basic cluster statistics, and to make use of the data. (Remember to navigate to the project directory and activate the virtual environment.) Run it with:
