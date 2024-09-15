@@ -5,16 +5,16 @@ image:
   pullPolicy: IfNotPresent
   pullSecrets: []
 
-replicas: 1
+replicas: 6
 updateStrategy:
   type: RollingUpdate
 resources:
   requests:
     cpu: '500m'
-    memory: '200Mi'
+    memory: '400Mi'
   limits:
     cpu: '1000m'
-    memory: '200Mi'
+    memory: '400Mi'
 
 service:
   name: weaviate

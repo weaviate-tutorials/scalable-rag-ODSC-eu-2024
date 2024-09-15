@@ -7,7 +7,7 @@ image:
   # of weaviate. In accordance with Infra-as-code, you should pin this value
   # down and only change it if you explicitly want to upgrade the Weaviate
   # version.
-  tag: 1.26.1
+  tag: 1.26.3
   repo: semitechnologies/weaviate
   # Image pull policy: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy
   pullPolicy: IfNotPresent
@@ -162,6 +162,8 @@ grpcService:
 
 # The service monitor defines prometheus monitoring for a set of services
 # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.ServiceMonitor
+# Make sure to set the following prometheus values if deploying observability with the kube-prometheus-stack helm chart:
+# - prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues: false
 serviceMonitor:
   enabled: false
   interval: 30s
@@ -365,6 +367,13 @@ offload:
       # Optional setting. Defaults to true.
       # Set this option if you don't want to use SSL.
       # OFFLOAD_S3_USE_SSL: true
+
+      # Optional setting. Defaults to false.
+      # Set this option if you wan't Weaviate to create
+      # the bucket used for offloading tenants. Otherwise,
+      # if set to false Weaviate expects the bucket to be
+      # already created with the OFFLOAD_S3_BUCKET name 
+      # OFFLOAD_S3_BUCKET_AUTO_CREATE: true
 
       # You can pass environment AWS settings here:
       # Define the region
@@ -999,6 +1008,32 @@ modules:
     # an environment variable
     apiKey: ''
 
+  # The text2vec-mistral module uses MISTRAL AI Embeddings API
+  # More information about MISTRAL AI's Embeddings API can be found here:
+  # https://docs.mistral.ai/api/#operation/createEmbedding
+  text2vec-mistral:
+
+    # enable if you want to use MISTRAL AI module
+    enabled: false
+
+    # Set your MISTRAL API Key to be passed to Weaviate pod as
+    # an environment variable
+    apiKey: ''
+
+  # The text2vec-databricks module uses Databricks Embeddings API
+  # to dynamically compute vector embeddings based on the
+  # sentence's context.
+  # More information about Databricks Embeddings API can be found here:
+  # https://docs.databricks.com/en/machine-learning/foundation-models/api-reference.html#embedding-task
+  text2vec-databricks:
+
+    # enable if you want to use Databricks module
+    enabled: false
+
+    # Set your Databricks Token to be passed to Weaviate pod as
+    # an environment variable
+    token: ''
+
   # The multi2vec-clip modules uses CLIP transformers to vectorize both images
   # and text in the same vector space. It is typically slow(er) on CPUs and should
   # run with CUDA-enabled GPUs for optimal performance.
@@ -1364,6 +1399,30 @@ modules:
     # Set your Anthropic API Key to be passed to Weaviate pod as
     # an environment variable
     apiKey: ''
+
+  # The generative-friendliai module uses FriendliAI API.
+  # More information about FriendliAI API can be found here:
+  # https://docs.friendli.ai/openapi/create-chat-completions
+  generative-friendliai:
+
+    # enable if you want to use FriendliAI module
+    enabled: false
+
+    # Set your FriendliAI Token to be passed to Weaviate pod as
+    # an environment variable
+    token: ''
+
+  # The generative-databricks module uses Databricks API.
+  # More information about Databricks API can be found here:
+  # https://docs.databricks.com/en/machine-learning/foundation-models/api-reference.html#completion-task
+  generative-databricks:
+
+    # enable if you want to use Databricks module
+    enabled: false
+
+    # Set your Databricks Token to be passed to Weaviate pod as
+    # an environment variable
+    token: ''
 
   # The img2vec-neural module uses neural networks, to generate
   # a vector representation of the image
