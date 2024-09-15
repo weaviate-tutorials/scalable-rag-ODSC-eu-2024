@@ -2,6 +2,8 @@
 
 README for ODSC Europe training: "How to run scalable, fault-tolerant RAG with a vector database"
 
+> Note: This project was archived after ODSC Europe 2024 and is no longer maintained. Thank you for your interest! Please see the official [Weaviate documentation](https://weaviate.io/developers/weaviate) for the latest information on Weaviate.
+
 ![App screenshot](assets/app.png)
 
 # Step 1: Preparation & Setup
